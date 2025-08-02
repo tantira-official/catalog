@@ -1,6 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-  const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSn_yS_cn36zbGYH64wdfOzPMIRtelkC674PZ98X9OmSeH5Pfyz_fkJPfBYFrqmOZU7hrQ5RpPuaNiI/pubhtml';
+  const sheetURL = https://docs.google.com/spreadsheets/d/e/2PACX-1vSn_yS_cn36zbGYH64wdfOzPMIRtelkC674PZ98X9OmSeH5Pfyz_fkJPfBYFrqmOZU7hrQ5RpPuaNiI/pubhtml;
   Tabletop.init({
     key: sheetURL,
     simpleSheet: true,
