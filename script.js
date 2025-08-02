@@ -1,11 +1,6 @@
-
 document.addEventListener('DOMContentLoaded', () => {
-  const sheetURL = https://docs.google.com/spreadsheets/d/e/2PACX-1vSn_yS_cn36zbGYH64wdfOzPMIRtelkC674PZ98X9OmSeH5Pfyz_fkJPfBYFrqmOZU7hrQ5RpPuaNiI/pubhtml;
-  Tabletop.init({
-    key: sheetURL,
-    simpleSheet: true,
-    callback: renderProducts
-  });
+  google.charts.load('current', { packages: ['corechart'] });
+  google.charts.setOnLoadCallback(fetchSheet);
 
   document.getElementById('search').addEventListener('input', filterProducts);
   document.getElementById('category-filter').addEventListener('change', filterProducts);
@@ -14,6 +9,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let allProducts = [];
+
+function fetchSheet() {
+  const query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1PJKCYjYcr1bYvX6hV8IpDecJlHVuAZTmOcn4x2dAE-Y/gviz/tq?sheet=Product_Catalog');
+  query.send(handleResponse);
+}
+
+function handleResponse(response) {
+  if (response.isError()) {
+    console.error('Error in query: ' + response.getMessage());
+    return;
+  }
+
+  const data = response.getDataTable();
+  const rows = data.getNumberOfRows();
+  const cols = data.getNumberOfColumns();
+  const result = [];
+
+  for (let i = 0; i < rows; i++) {
+    let row = {};
+    for (let j = 0; j < cols; j++) {
+      row[data.getColumnLabel(j)] = data.getValue(i, j);
+    }
+    result.push(row);
+  }
+
+  renderProducts(result);
+}
 
 function renderProducts(data) {
   allProducts = data.filter(p => p.Inventory_Status === 'In Stock' && p.Listing_Status === 'Published');
@@ -24,6 +46,7 @@ function renderProducts(data) {
 function populateCategories(products) {
   const categories = new Set(products.map(p => p.Category).filter(Boolean));
   const filter = document.getElementById('category-filter');
+  filter.innerHTML = '<option value="All">All Categories</option>';
   categories.forEach(cat => {
     const opt = document.createElement('option');
     opt.value = cat;
@@ -48,22 +71,22 @@ function updateProductList(products) {
   products.forEach(product => {
     const images = (product.Images || '').split(',').map(url => url.trim());
     const imageHTML = images.map(url =>
-      `<img src="\${url}" alt="\${product.Name}" onclick="openLightbox('\${url}')" />`
+      `<img src="${url}" alt="${product.Name}" onclick="openLightbox('${url}')" />`
     ).join('');
-    const html = \`
+    const html = `
       <div class="product-card">
-        <div class="product-images">\${imageHTML}</div>
-        <h2>\${product.Name}</h2>
-        <p>\${product.Description}</p>
+        <div class="product-images">${imageHTML}</div>
+        <h2>${product.Name}</h2>
+        <p>${product.Description}</p>
         <div class="price">
-          <s>₹\${product.Price}</s> ₹\${product.Discounted_Price}
+          <s>₹${product.Price}</s> ₹${product.Discounted_Price}
         </div>
         <a class="whatsapp-btn" target="_blank"
-          href="https://wa.me/919164488088?text=I'm%20interested%20in%20\${encodeURIComponent(product.Name)}">
+          href="https://wa.me/919164488088?text=I'm%20interested%20in%20${encodeURIComponent(product.Name)}">
           Message on WhatsApp
         </a>
       </div>
-    \`;
+    `;
     container.insertAdjacentHTML('beforeend', html);
   });
 }
