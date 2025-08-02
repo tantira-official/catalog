@@ -1,6 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-  const sheetURL = 'YOUR_PUBLISHED_SHEET_URL';
+  const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSn_yS_cn36zbGYH64wdfOzPMIRtelkC674PZ98X9OmSeH5Pfyz_fkJPfBYFrqmOZU7hrQ5RpPuaNiI/pubhtml';
   Tabletop.init({
     key: sheetURL,
     simpleSheet: true,
@@ -59,7 +59,7 @@ function updateProductList(products) {
           <s>₹\${product.Price}</s> ₹\${product.Discounted_Price}
         </div>
         <a class="whatsapp-btn" target="_blank"
-          href="https://wa.me/91YOURNUMBER?text=I'm%20interested%20in%20\${encodeURIComponent(product.Name)}">
+          href="https://wa.me/919164488088?text=I'm%20interested%20in%20\${encodeURIComponent(product.Name)}">
           Message on WhatsApp
         </a>
       </div>
